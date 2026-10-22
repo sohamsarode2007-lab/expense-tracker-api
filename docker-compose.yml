@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: expenses
+      POSTGRES_PASSWORD: expenses
+      POSTGRES_DB: expenses
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://expenses:expenses@db:5432/expenses
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
